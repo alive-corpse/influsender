@@ -15,10 +15,10 @@ Small utility to send main metrics (load average, uptime, mem, disk, io, net) to
 
 ## Cons
 
-* It's my first experience with golang and made in two evernings so code can be ugly but it works :)
+* It's my first experience with golang and it was made in two evernings so code can be ugly but it works :)
 * It's not so small as I expected
 * It hasn't ability of run external scripts or commands for extending functional (but I think about make it)
-* It can't run from docker (by oblibious reasons)
+* It can't be run from docker (actually it can, but it's useless by oblibious reasons)
 * For running under musl-based distributives like an Alpine linux it should be builded on them (tested with Alpine linux v3.13)
 
 ## Usage:
