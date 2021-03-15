@@ -1,0 +1,27 @@
+# possible values : production, development
+[influxdb]
+# For example influxdb = http://10.11.11.4:8086/write?db=test
+host = 127.0.0.1 # 127.0.0.1 by default
+port = 8086 # 8086 by default
+protocol = http # http by default
+database = influsender # influsender by default
+
+[main]
+# List of checks (all by default)
+# uptime - System uptime in seconds
+# loadavg - Load average for 1m, 5m, 10m
+# mem - Memory statistics
+# disk - Storage statistics
+#checklist = uptime,loadavg,mem,disk,diskio,net,proc
+
+[disk]
+# mountpoints - / by default
+#mountpoints = / 
+
+[diskio]
+# disks - all physical disks by default, can be listed few disks by comma
+#disks = sda,sdb,sdc
+
+[net]
+# intergaces - all physical interfaces and bridges by default
+#interfaces = eth0

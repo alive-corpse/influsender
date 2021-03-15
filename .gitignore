@@ -1,0 +1,6 @@
+*.swp
+*.swo
+.vscode
+launch.json
+influsender_*
+influsender.ini
