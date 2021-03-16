@@ -117,6 +117,7 @@ func df(path string) string {
 			lw("Fail to make syscall for getting file system statistics for " + path)
 			return ""
 		}
+		fmt.Println(stat)
 		var dfree, davail, dtotal, dused, dfreeprec, davailprec, dusedprec float64
 		dfree = float64(stat.Bfree) * float64(stat.Bsize) / 1024 / 1024 / 1024
 		davail = float64(stat.Bavail) * float64(stat.Bsize) / 1024 / 1024 / 1024
@@ -134,7 +135,7 @@ func df(path string) string {
 		res += f("Disk", fmt.Sprintf("%d", stat.Ffree), "disktype=ifree,path="+path) + "\n"
 		res += f("Disk", fmt.Sprintf("%d", stat.Files-stat.Ffree), "disktype=iused,path="+path) + "\n"
 		res += f("Disk", fmt.Sprintf("%.2f", float64(stat.Ffree)/float64(stat.Files)*100), "disktype=ifreeprec,path="+path) + "\n"
-		res += f("Disk", fmt.Sprintf("%.2f", float64((stat.Files-stat.Ffree))/float64(stat.Files)*100), "disktype=ifreeprec,path="+path) + "\n"
+		res += f("Disk", fmt.Sprintf("%.2f", float64((stat.Files-stat.Ffree))/float64(stat.Files)*100), "disktype=iusedprec,path="+path) + "\n"
 	}
 
 	return res
