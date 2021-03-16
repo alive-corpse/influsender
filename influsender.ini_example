@@ -1,6 +1,4 @@
-# possible values : production, development
 [influxdb]
-# For example influxdb = http://10.11.11.4:8086/write?db=test
 host = 127.0.0.1 # 127.0.0.1 by default
 port = 8086 # 8086 by default
 protocol = http # http by default
