@@ -1,10 +1,5 @@
 package main
 
-//TODO: list of mountpoints for disk
-//TODO: temperature stats
-//TODO: opened files
-//TODO: opened sockets
-
 import (
 	"fmt"
 	"io"
