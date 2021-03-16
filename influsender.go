@@ -117,7 +117,6 @@ func df(path string) string {
 			lw("Fail to make syscall for getting file system statistics for " + path)
 			return ""
 		}
-		fmt.Println(stat)
 		var dfree, davail, dtotal, dused, dfreeprec, davailprec, dusedprec float64
 		dfree = float64(stat.Bfree) * float64(stat.Bsize) / 1024 / 1024 / 1024
 		davail = float64(stat.Bavail) * float64(stat.Bsize) / 1024 / 1024 / 1024
