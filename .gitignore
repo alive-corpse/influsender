@@ -1,6 +1,7 @@
 *.swp
 *.swo
 .vscode
+todo.lst
 launch.json
 influsender_*
 influsender.ini
