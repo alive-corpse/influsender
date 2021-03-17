@@ -10,16 +10,16 @@ database = influsender # influsender by default
 # loadavg - Load average for 1m, 5m, 10m
 # mem - Memory statistics
 # disk - Storage statistics
-#checklist = uptime,loadavg,mem,disk,diskio,net,proc
+# checklist = uptime,loadavg,mem,disk,diskio,net,temp,proc
 
 [disk]
 # mountpoints - / by default
-#mountpoints = / 
+# mountpoints = / 
 
 [diskio]
 # disks - all physical disks by default, can be listed few disks by comma
-#disks = sda,sdb,sdc
+# disks = sda,sdb,sdc
 
 [net]
 # intergaces - all physical interfaces and bridges by default
-#interfaces = eth0
+# interfaces = eth0

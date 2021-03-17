@@ -120,16 +120,16 @@ func df(path string) string {
 		dfreeprec = dfree / dtotal * 100
 		davailprec = davail / dtotal * 100
 		dusedprec = 100 - davailprec
-		res += f("Disk", fmt.Sprintf("%.3f", dfree), "disktype=free,path="+path) + "\n"
-		res += f("Disk", fmt.Sprintf("%.2f", dfreeprec), "disktype=freeprec,path="+path) + "\n"
-		res += f("Disk", fmt.Sprintf("%.3f", davail), "disktype=avail,path="+path) + "\n"
-		res += f("Disk", fmt.Sprintf("%.2f", davailprec), "disktype=availprec,path="+path) + "\n"
-		res += f("Disk", fmt.Sprintf("%.3f", dused), "disktype=used,path="+path) + "\n"
-		res += f("Disk", fmt.Sprintf("%.2f", dusedprec), "disktype=usedprec,path="+path) + "\n"
-		res += f("Disk", fmt.Sprintf("%d", stat.Ffree), "disktype=ifree,path="+path) + "\n"
-		res += f("Disk", fmt.Sprintf("%d", stat.Files-stat.Ffree), "disktype=iused,path="+path) + "\n"
-		res += f("Disk", fmt.Sprintf("%.2f", float64(stat.Ffree)/float64(stat.Files)*100), "disktype=ifreeprec,path="+path) + "\n"
-		res += f("Disk", fmt.Sprintf("%.2f", float64((stat.Files-stat.Ffree))/float64(stat.Files)*100), "disktype=iusedprec,path="+path) + "\n"
+		res += f("Disk", fmt.Sprintf("%.3f", dfree), "disktype=free,path="+p) + "\n"
+		res += f("Disk", fmt.Sprintf("%.2f", dfreeprec), "disktype=freeprec,path="+p) + "\n"
+		res += f("Disk", fmt.Sprintf("%.3f", davail), "disktype=avail,path="+p) + "\n"
+		res += f("Disk", fmt.Sprintf("%.2f", davailprec), "disktype=availprec,path="+p) + "\n"
+		res += f("Disk", fmt.Sprintf("%.3f", dused), "disktype=used,path="+p) + "\n"
+		res += f("Disk", fmt.Sprintf("%.2f", dusedprec), "disktype=usedprec,path="+p) + "\n"
+		res += f("Disk", fmt.Sprintf("%d", stat.Ffree), "disktype=ifree,path="+p) + "\n"
+		res += f("Disk", fmt.Sprintf("%d", stat.Files-stat.Ffree), "disktype=iused,path="+p) + "\n"
+		res += f("Disk", fmt.Sprintf("%.2f", float64(stat.Ffree)/float64(stat.Files)*100), "disktype=ifreeprec,path="+p) + "\n"
+		res += f("Disk", fmt.Sprintf("%.2f", float64((stat.Files-stat.Ffree))/float64(stat.Files)*100), "disktype=iusedprec,path="+p) + "\n"
 	}
 
 	return res
@@ -212,9 +212,51 @@ func net(ifaceswhitelist string) string {
 	return res
 }
 
+func temp() string {
+	res := ""
+	_, err := os.Stat("/sys/class/thermal/")
+	if err == nil {
+		li("Getting temperature")
+		dir, err := os.Open("/sys/class/thermal/")
+		if err != nil {
+			lw("Can't read /sys/class/thermal directory")
+			return ""
+		}
+		dirs, err := dir.Readdir(-1)
+		if err != nil {
+			lw("Something goes wrong while reading directory /sys/calss/thermal")
+			return ""
+		}
+		dir.Close()
+		thermalZone := regexp.MustCompile(`^thermal_zone[0-9]+$`)
+		for _, d := range dirs {
+			if thermalZone.MatchString(d.Name()) {
+				zone := d.Name()[12:]
+				t := r("/sys/class/thermal/thermal_zone" + zone + "/temp")
+				ttype := s.ReplaceAll(s.Trim(r("/sys/class/thermal/thermal_zone"+zone+"/type"), " "), " ", "_")
+				if ttype == "" {
+					ttype = "none"
+				}
+				temp := ""
+				if len(t) > 1 {
+					temp = s.TrimRight(t[0:len(t)-3]+"."+t[len(t)-3:], "0")
+					if s.HasSuffix(temp, ".") {
+						temp = temp + "0"
+					}
+				} else {
+					temp = t
+				}
+				res += f("Temp", temp, "temptype="+ttype+",zone="+zone) + "\n"
+			}
+		}
+		return res
+	}
+	return ""
+}
+
 func proc() string {
 	li("Counting processes...")
-	var isIntCheck = regexp.MustCompile(`^[0-9]+$`)
+	isIntCheck := regexp.MustCompile(`^[0-9]+$`)
 	dir, err := os.Open("/proc/")
 	if err != nil {
 		lw("Can't read /proc directory")
@@ -236,6 +278,14 @@ func proc() string {
 }
 
 func send(url, data string) string {
+	if url == "" {
+		le("Empty influxdb url")
+		return ""
+	}
+	if url == "" {
+		le("Nothing to send ot influxdb")
+		return ""
+	}
 	li("Sending data to remote server")
 	client := &http.Client{}
 	payload := s.NewReader(data)
@@ -258,7 +308,6 @@ func send(url, data string) string {
 		fmt.Println(err)
 		return ""
 	}
-	fmt.Println(string(body))
 	return string(body)
 }
 
@@ -309,7 +358,7 @@ func main() {
 		database = "influsender"
 	}
 	if checklist == "" {
-		checklist = "uptime,loadavg,mem,disk,diskio,net,proc"
+		checklist = "uptime,loadavg,mem,disk,diskio,net,temp,proc"
 	}
 	url := fmt.Sprintf("%s://%s:%s/write?db=%s", proto, host, port, database)
 
@@ -331,6 +380,8 @@ func main() {
 			res += dio(disks)
 		case "net":
 			res += net(interfaces)
+		case "temp":
+			res += temp()
 		case "proc":
 			res += proc()
 		}
