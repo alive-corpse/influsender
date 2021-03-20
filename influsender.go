@@ -154,22 +154,22 @@ func dio(disks string) string {
 						res += f("Disk", dfields[3], "disktype=reads,dev="+dfields[2]) + "\n"
 						res += f("Disk", dfields[4], "disktype=mergedreads,dev="+dfields[2]) + "\n"
 						res += f("Disk", dfields[5], "disktype=sectorsreads,dev="+dfields[2]) + "\n"
-						res += f("Disk", dfields[5], "disktype=readingms,dev="+dfields[2]) + "\n"
-						res += f("Disk", dfields[6], "disktype=writes,dev="+dfields[2]) + "\n"
-						res += f("Disk", dfields[7], "disktype=mergedwrites,dev="+dfields[2]) + "\n"
-						res += f("Disk", dfields[8], "disktype=sectorswrites,dev="+dfields[2]) + "\n"
-						res += f("Disk", dfields[9], "disktype=writingms,dev="+dfields[2]) + "\n"
+						res += f("Disk", dfields[6], "disktype=readingms,dev="+dfields[2]) + "\n"
+						res += f("Disk", dfields[7], "disktype=writes,dev="+dfields[2]) + "\n"
+						res += f("Disk", dfields[8], "disktype=mergedwrites,dev="+dfields[2]) + "\n"
+						res += f("Disk", dfields[9], "disktype=sectorswrites,dev="+dfields[2]) + "\n"
+						res += f("Disk", dfields[10], "disktype=writingms,dev="+dfields[2]) + "\n"
 					}
 				}
 			} else {
 				res += f("Disk", dfields[3], "disktype=reads,dev="+dfields[2]) + "\n"
 				res += f("Disk", dfields[4], "disktype=mergedreads,dev="+dfields[2]) + "\n"
 				res += f("Disk", dfields[5], "disktype=sectorsreads,dev="+dfields[2]) + "\n"
-				res += f("Disk", dfields[5], "disktype=readingms,dev="+dfields[2]) + "\n"
-				res += f("Disk", dfields[6], "disktype=writes,dev="+dfields[2]) + "\n"
-				res += f("Disk", dfields[7], "disktype=mergedwrites,dev="+dfields[2]) + "\n"
-				res += f("Disk", dfields[8], "disktype=sectorswrites,dev="+dfields[2]) + "\n"
-				res += f("Disk", dfields[9], "disktype=writingms,dev="+dfields[2]) + "\n"
+				res += f("Disk", dfields[6], "disktype=readingms,dev="+dfields[2]) + "\n"
+				res += f("Disk", dfields[7], "disktype=writes,dev="+dfields[2]) + "\n"
+				res += f("Disk", dfields[8], "disktype=mergedwrites,dev="+dfields[2]) + "\n"
+				res += f("Disk", dfields[9], "disktype=sectorswrites,dev="+dfields[2]) + "\n"
+				res += f("Disk", dfields[10], "disktype=writingms,dev="+dfields[2]) + "\n"
 			}
 		}
 	}
